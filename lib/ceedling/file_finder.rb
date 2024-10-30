@@ -54,7 +54,6 @@ class FileFinder
 
     # Strip off file extension
     source_file = File.basename(filepath).ext('')
-    # extension = File.extname(filepath)
 
     # We only collect files that already exist when we start up.
     # FileLists can produce undesired results for dynamically generated files depending on when they're accessed.
