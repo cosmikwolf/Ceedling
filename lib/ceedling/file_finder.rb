@@ -54,6 +54,7 @@ class FileFinder
 
     # Strip off file extension
     source_file = File.basename(filepath).ext('')
+    # extension = File.extname(filepath)
 
     # We only collect files that already exist when we start up.
     # FileLists can produce undesired results for dynamically generated files depending on when they're accessed.
@@ -66,7 +67,7 @@ class FileFinder
 
     # Generated test runners
     if (!release) and (source_file =~ /^#{@configurator.project_test_file_prefix}.+#{@configurator.test_runner_file_suffix}$/)
-      _source_file = source_file + EXTENSION_CORE_SOURCE
+      _source_file = source_file + @configurator.extension_assembly
       found_file =
         @file_finder_helper.find_file_in_collection(
           _source_file,
@@ -76,7 +77,7 @@ class FileFinder
 
     # Generated mocks
     elsif (!release) and (source_file =~ /^#{@configurator.cmock_mock_prefix}/)
-      _source_file = source_file + EXTENSION_CORE_SOURCE
+      _source_file = source_file + @configurator.extension_assembly
       found_file =
         @file_finder_helper.find_file_in_collection(
           _source_file,
@@ -86,8 +87,8 @@ class FileFinder
 
     # Vendor framework sources (unity.c, cmock.c, cexception.c, etc.)
     # Note: Taking a small chance by mixing test and release frameworks without smart checks on test/release build
-    elsif (@configurator.collection_vendor_framework_sources.include?(source_file.ext(EXTENSION_CORE_SOURCE)))
-      _source_file = source_file + EXTENSION_CORE_SOURCE
+    elsif @configurator.collection_vendor_framework_sources.include?(source_file.ext(extension))
+      _source_file = source_file + @configurator.extension_assembly
       found_file =
         @file_finder_helper.find_file_in_collection(
           _source_file,
